@@ -2,81 +2,59 @@ const courses = [
   {
     id: 1,
     title: "Introduction to HTML",
-    description: "Learn the structure of web pages using HTML.",
-    lessons: ["HTML Basics", "Tags & Attributes", "Building a Simple Page"],
+    description: "Learn the basics of structuring web pages using HTML.",
+    lessons: ["HTML Syntax", "Tags and Elements", "Building a Simple Page"],
   },
   {
     id: 2,
     title: "CSS for Beginners",
     description: "Style your web pages beautifully with CSS.",
-    lessons: ["Selectors & Colors", "Box Model", "Layouts & Flexbox"],
+    lessons: ["Selectors", "Box Model", "Flexbox & Grid"],
   },
   {
     id: 3,
-    title: "JavaScript Fundamentals",
-    description: "Make your website interactive with JavaScript.",
-    lessons: ["Variables", "Functions", "DOM Manipulation"],
+    title: "JavaScript Essentials",
+    description: "Add interactivity and logic to your websites.",
+    lessons: ["Variables & Data Types", "DOM Manipulation", "Functions & Events"],
   },
 ];
 
-const courseListPage = document.getElementById("course-list");
-const courseDetailPage = document.getElementById("course-detail");
-const coursesContainer = document.getElementById("courses");
-const courseContent = document.getElementById("course-content");
-const backBtn = document.getElementById("back-btn");
+const courseList = document.getElementById("course-list");
+const courseDetails = document.getElementById("course-details");
 
-// Show all courses
-function showCourses() {
-  coursesContainer.innerHTML = "";
+// Load courses
+function renderCourses() {
+  courseList.innerHTML = "<h2>Available Courses</h2>";
   courses.forEach((course) => {
     const div = document.createElement("div");
-    div.className = "course-card";
-    div.innerHTML = `
-      <h3>${course.title}</h3>
-      <p>${course.description}</p>
-      <button onclick="viewCourse(${course.id})">View Details</button>
-    `;
-    coursesContainer.appendChild(div);
+    div.classList.add("course-card");
+    div.innerHTML = `<h3>${course.title}</h3><p>${course.description}</p>`;
+    div.onclick = () => showCourseDetails(course.id);
+    courseList.appendChild(div);
   });
 }
 
-function viewCourse(id) {
+// Show details
+function showCourseDetails(id) {
   const course = courses.find((c) => c.id === id);
-  if (!course) return;
-
-  courseContent.innerHTML = `
+  courseDetails.innerHTML = `
     <h2>${course.title}</h2>
     <p>${course.description}</p>
     <h4>Lessons:</h4>
-    ${course.lessons
-      .map(
-        (lesson, i) => `
-        <div class="lesson">
-          <span>${i + 1}. ${lesson}</span>
-          <button onclick="markCompleted(${id}, ${i})">Mark Completed</button>
-        </div>
-      `
-      )
-      .join("")}
-    <button onclick="markCourseCompleted(${id})" style="margin-top:10px;background:green;">Mark Course as Completed</button>
+    <ul>${course.lessons.map((l) => `<li>${l}</li>`).join("")}</ul>
+    <button id="complete-btn" onclick="markComplete(${course.id})">
+      Mark as Complete
+    </button>
   `;
-
-  switchPage("course-detail");
 }
 
-function markCompleted(courseId, lessonIndex) {
-  alert(`Lesson ${lessonIndex + 1} of Course ${courseId} marked as completed ✅`);
+// Mark completed
+function markComplete(id) {
+  const btn = document.getElementById("complete-btn");
+  alert("Lesson completed!");
+  btn.innerText = "Completed ✅";
+  btn.classList.add("completed");
+  btn.disabled = true;
 }
 
-function markCourseCompleted(courseId) {
-  alert(`Course ${courseId} marked as completed 🎉`);
-}
-
-function switchPage(pageId) {
-  document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
-  document.getElementById(pageId).classList.add("active");
-}
-
-backBtn.addEventListener("click", () => switchPage("course-list"));
-
-showCourses();
+renderCourses();
