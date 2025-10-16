@@ -1,5 +1,9 @@
 const main = document.getElementById("mainContent");
 const homeBtn = document.getElementById("homeBtn");
+const signinBtn = document.getElementById("signinBtn");
+
+let currentUser = null;
+let completedLessons = {};
 
 const courses = [
   {
@@ -22,10 +26,9 @@ const courses = [
   }
 ];
 
-let completedLessons = {};
-
 function renderCourses() {
   main.innerHTML = `
+    <h2>${currentUser ? `Welcome, ${currentUser}!` : "Available Courses"}</h2>
     <div class="course-list">
       ${courses.map(c => `
         <div class="course-card" onclick="viewCourse(${c.id})">
@@ -74,5 +77,27 @@ function markLesson(courseId, lessonIndex) {
   viewCourse(courseId);
 }
 
+function renderSignIn() {
+  main.innerHTML = `
+    <div class="signin-form">
+      <h2>Sign In</h2>
+      <input type="text" id="username" placeholder="Enter your name" />
+      <button onclick="handleSignIn()">Sign In</button>
+    </div>
+  `;
+}
+
+function handleSignIn() {
+  const name = document.getElementById("username").value.trim();
+  if (name) {
+    currentUser = name;
+    renderCourses();
+  } else {
+    alert("Please enter your name to continue.");
+  }
+}
+
 homeBtn.addEventListener("click", renderCourses);
+signinBtn.addEventListener("click", renderSignIn);
+
 renderCourses();
