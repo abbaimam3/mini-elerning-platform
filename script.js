@@ -1,61 +1,78 @@
-const content = document.getElementById('content');
-const homeBtn = document.getElementById('homeBtn');
-const signinBtn = document.getElementById('signinBtn');
+const main = document.getElementById("mainContent");
+const homeBtn = document.getElementById("homeBtn");
 
 const courses = [
-  { id: 1, title: "HTML Basics", description: "Learn the structure of web pages.", completed: false },
-  { id: 2, title: "CSS Fundamentals", description: "Style and design beautiful websites.", completed: false },
-  { id: 3, title: "JavaScript Essentials", description: "Add interactivity and logic to your web apps.", completed: false }
+  {
+    id: 1,
+    title: "Web Development",
+    level: "Beginner",
+    lessons: ["HTML Basics", "CSS Layout", "JavaScript Intro"]
+  },
+  {
+    id: 2,
+    title: "React Fundamentals",
+    level: "Intermediate",
+    lessons: ["Components", "State & Props", "Hooks"]
+  },
+  {
+    id: 3,
+    title: "UI/UX Design",
+    level: "Advanced",
+    lessons: ["Design Principles", "Prototyping", "User Testing"]
+  }
 ];
 
-// Display all courses
-function showCourses() {
-  content.innerHTML = `
-    <h2>Available Courses</h2>
+let completedLessons = {};
+
+function renderCourses() {
+  main.innerHTML = `
     <div class="course-list">
-      ${courses.map(course => `
-        <div class="course">
-          <h3>${course.title}</h3>
-          <p>${course.description}</p>
-          <button class="complete-btn ${course.completed ? 'completed' : ''}" onclick="toggleComplete(${course.id})">
-            ${course.completed ? 'Completed ✅' : 'Mark Complete'}
-          </button>
+      ${courses.map(c => `
+        <div class="course-card" onclick="viewCourse(${c.id})">
+          <h3>${c.title}</h3>
+          <p>Level: ${c.level}</p>
         </div>
       `).join('')}
     </div>
   `;
 }
 
-// Toggle course completion
-function toggleComplete(id) {
+function viewCourse(id) {
   const course = courses.find(c => c.id === id);
-  if (course) {
-    course.completed = !course.completed;
-    alert(course.completed ? `${course.title} completed! 🎉` : `${course.title} marked as incomplete.`);
-    showCourses();
-  }
-}
+  const total = course.lessons.length;
+  const done = completedLessons[id] ? completedLessons[id].length : 0;
+  const percent = Math.round((done / total) * 100);
 
-// Simple sign-in form (mock)
-function showSignIn() {
-  content.innerHTML = `
-    <div class="signin-form">
-      <h2>Sign In</h2>
-      <input type="text" placeholder="Username" />
-      <input type="password" placeholder="Password" />
-      <button onclick="signIn()">Login</button>
+  main.innerHTML = `
+    <div class="course-details">
+      <h2>${course.title}</h2>
+      <p>Level: ${course.level}</p>
+      <div class="progress-bar"><div class="progress-fill" style="width:${percent}%;"></div></div>
+      <h3>Lessons</h3>
+      ${course.lessons.map((l, i) => {
+        const completed = completedLessons[id]?.includes(i);
+        return `
+          <div class="lesson ${completed ? "completed" : ""}">
+            <span>${l}</span>
+            <button class="complete-btn ${completed ? "completed" : ""}" onclick="markLesson(${id},${i})">
+              ${completed ? "✓ Completed" : "Mark Complete"}
+            </button>
+          </div>
+        `;
+      }).join('')}
+      <button onclick="renderCourses()">← Back</button>
     </div>
   `;
 }
 
-function signIn() {
-  alert("Login successful! (Demo only — no backend connected)");
-  showCourses();
+function markLesson(courseId, lessonIndex) {
+  completedLessons[courseId] = completedLessons[courseId] || [];
+  const lessons = completedLessons[courseId];
+  if (!lessons.includes(lessonIndex)) {
+    lessons.push(lessonIndex);
+  }
+  viewCourse(courseId);
 }
 
-// Navigation
-homeBtn.addEventListener('click', showCourses);
-signinBtn.addEventListener('click', showSignIn);
-
-// Initial load
-showCourses();
+homeBtn.addEventListener("click", renderCourses);
+renderCourses();
