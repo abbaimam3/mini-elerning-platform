@@ -1,6 +1,6 @@
 📘 Mini E-Learning Platform
 
-🎯 Project Overview
+🎯 Project Overview 
 
 This is a mini e-learning platform prototype built using HTML, CSS, and JavaScript.
 It allows learners to:
