@@ -6,6 +6,7 @@ body {
   color: #333;
 }
 
+/* ===== Header ===== */
 header {
   background: #0056b3;
   color: white;
@@ -35,6 +36,7 @@ nav button:hover {
   background: #dfe8ff;
 }
 
+/* ===== Main Section ===== */
 main {
   max-width: 1000px;
   margin: 2rem auto;
@@ -59,6 +61,7 @@ main {
   transform: translateY(-4px);
 }
 
+/* ===== Buttons ===== */
 button.complete-btn {
   background: #007bff;
   color: white;
@@ -77,6 +80,7 @@ button.complete-btn.completed {
   background: #28a745;
 }
 
+/* ===== Sign-in Form ===== */
 .signin-form {
   background: white;
   max-width: 400px;
@@ -109,6 +113,7 @@ button.complete-btn.completed {
   background: #0056b3;
 }
 
+/* ===== Footer ===== */
 footer {
   text-align: center;
   padding: 1rem;
